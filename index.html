@@ -3,23 +3,175 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DomBDev - GitHub Pages</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Dominic Bonanni | Developer</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Playfair+Display:wght@400;700&family=Inter:wght@400;600&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        background: '#0a0a0b',
+                        accent: '#9b8b7c',
+                    },
+                    fontFamily: {
+                        mono: ['Space Mono', 'monospace'],
+                        display: ['Playfair Display', 'serif'],
+                        body: ['Inter', 'sans-serif'],
+                    },
+                    gradientColorStops: {
+                        'accent-start': 'rgba(155, 139, 124, 0.1)',
+                        'accent-end': 'rgba(155, 139, 124, 0.05)',
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.3s ease-in-out',
+                        'fade-out': 'fadeOut 0.3s ease-in-out',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        fadeOut: {
+                            '0%': { opacity: '1', transform: 'translateY(0)' },
+                            '100%': { opacity: '0', transform: 'translateY(20px)' },
+                        },
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        .filter-btn {
+            position: relative;
+            padding: 0.5rem 1rem;
+            color: rgba(155, 139, 124, 0.7);
+            font-family: 'Space Mono', monospace;
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
+        .filter-btn::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: #9b8b7c;
+            transition: width 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+
+        .filter-btn:hover {
+            color: rgba(155, 139, 124, 1);
+        }
+
+        .filter-btn:hover::after {
+            width: 100%;
+        }
+
+        .filter-btn.active {
+            color: white;
+        }
+
+        .filter-btn.active::after {
+            width: 100%;
+            background-color: white;
+        }
+    </style>
 </head>
-<body>
-    <header>
-        <h1>Welcome to DomBDev</h1>
-        <p>Your one-stop destination for my projects and information.</p>
-    </header>
-    <main>
-        <section class="links">
-            <a href="https://bonannidominic.me/" class="button">My Website</a>
-            <a href="https://github.com/DomBDev" class="button">My GitHub Profile</a>
-            <a href="https://github.com/DomBDev?tab=repositories" class="button">My Repositories</a>
-        </section>
-    </main>
-    <footer>
-        <p>&copy; 2023 DomBDev. All rights reserved.</p>
-    </footer>
+<body class="bg-background text-white font-body overflow-x-hidden">
+    <div class="min-h-screen p-8 relative bg-gradient-to-br from-accent-start to-accent-end">
+        <div class="fixed top-8 left-8 z-10">
+            <a href="/" class="font-mono text-2xl font-bold tracking-wider relative group">
+                <span class="relative z-10 transition-colors duration-300 group-hover:text-accent">DB</span>
+                <span class="absolute inset-0 bg-accent/10 rounded-lg -z-0 transform origin-left scale-x-0 transition-transform duration-300 group-hover:scale-x-100"></span>
+            </a>
+        </div>
+        
+        <nav class="fixed top-8 right-8 flex gap-6 z-10">
+            <a href="mailto:your@email.com" class="nav-link group relative">
+                <span class="absolute -inset-2 bg-accent/5 rounded-lg transform origin-center scale-0 transition-transform duration-300 group-hover:scale-100"></span>
+                <svg class="w-6 h-6 relative transform transition-transform duration-300 group-hover:-translate-y-0.5" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M4 4H20C21.1 4 22 4.9 22 6V18C22 19.1 21.1 20 20 20H4C2.9 20 2 19.1 2 18V6C2 4.9 2.9 4 4 4Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M22 6L12 13L2 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </a>
+            <a href="https://github.com/DomBDev" class="nav-link group relative">
+                <span class="absolute -inset-2 bg-accent/5 rounded-lg transform origin-center scale-0 transition-transform duration-300 group-hover:scale-100"></span>
+                <svg class="w-6 h-6 relative transform transition-transform duration-300 group-hover:-translate-y-0.5" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2C6.477 2 2 6.477 2 12C2 16.991 5.657 21.128 10.438 22V18.657C10.438 18.657 9.875 18.657 9.031 18.657C7.546 18.657 6.938 17.657 6.844 17.157C6.75 16.657 6.375 16.157 6 15.907C5.625 15.657 5.25 15.657 5.438 15.407C6.188 14.907 6.938 15.407 7.688 16.407C8.219 17.157 9.031 17.032 9.438 16.907C9.531 16.407 9.813 15.907 10.188 15.657C7.313 15.157 5.813 13.657 5.813 11.407C5.813 10.407 6.188 9.407 6.938 8.657C6.844 8.407 6.75 7.782 6.75 6.907C6.75 6.407 6.75 5.657 7.125 5.157C7.125 5.157 8.813 5.157 10.438 6.657C11.188 6.407 12.813 6.407 13.563 6.657C15.188 5.157 16.875 5.157 16.875 5.157C17.25 5.657 17.25 6.407 17.25 6.907C17.25 7.907 17.156 8.407 17.063 8.657C17.813 9.407 18.188 10.282 18.188 11.407C18.188 13.657 16.688 15.157 13.813 15.657C14.188 15.907 14.563 16.532 14.563 17.157V22C19.344 21.128 23 16.991 23 12C23 6.477 18.523 2 13 2H12Z" fill="currentColor"/>
+                </svg>
+            </a>
+            <a href="https://bonannidominic.me/" class="nav-link group relative">
+                <span class="absolute -inset-2 bg-accent/5 rounded-lg transform origin-center scale-0 transition-transform duration-300 group-hover:scale-100"></span>
+                <svg class="w-6 h-6 relative transform transition-transform duration-300 group-hover:-translate-y-0.5" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </a>
+        </nav>
+
+        <main class="max-w-7xl mx-auto pt-[8vh]">
+            <div class="flex flex-col lg:flex-row gap-16">
+                <!-- Welcome Section -->
+                <div class="lg:w-1/2">
+                    <h1 class="font-display text-7xl font-bold mb-8 animate__animated animate__fadeInUp animate__faster">Welcome.</h1>
+                    <div class="max-w-2xl mb-16">
+                        <p class="mb-4 animate__animated animate__fadeInUp animate__faster animate__delay-1s">I'm Dominic Bonanni, a full-stack developer based in New York. I specialize in building modern web applications using the MERN stack, Flask, and .NET, with a focus on creating seamless user experiences.</p>
+                        <p class="animate__animated animate__fadeInUp animate__faster animate__delay-1s">From e-commerce solutions to interactive learning platforms, I'm passionate about crafting clean, scalable code and delivering pixel-perfect interfaces. My expertise spans across React, Node.js, TailwindCSS, and various modern web technologies.</p>
+                    </div>
+                </div>
+
+                <!-- GitHub Stats Section -->
+                <div class="lg:w-1/2 animate__animated animate__fadeInRight animate__faster">
+                    <h2 class="text-4xl mb-6 text-accent relative inline-block">
+                        GitHub Stats
+                        <span class="absolute bottom-0 left-0 w-full h-0.5 bg-accent/20 transform origin-left"></span>
+                    </h2>
+                    <div class="flex flex-col relative">
+                        <!-- Profile Views - Minimal Style -->
+                        <div class="stats-card bg-accent-start/5 p-3 rounded-lg backdrop-blur-sm transform-gpu opacity-0 translate-x-4 transition-all duration-300">
+                            <img src="https://komarev.com/ghpvc/?username=DomBDev&color=blue&style=flat" 
+                                 alt="Profile Views" 
+                                 class="h-6" />
+                        </div>
+                        
+                        <!-- GitHub Stats Card -->
+                        <div class="stats-card bg-accent-start/5 rounded-lg backdrop-blur-sm transform-gpu opacity-0 -translate-x-4 transition-all duration-300">
+                            <img src="https://github-readme-stats.vercel.app/api?username=DomBDev&hide=contribs,prs,stars,issues&theme=radical&hide_border=true&border_radius=2&bg_color=00000000" 
+                                 alt="GitHub Stats" 
+                                 class="w-full max-w-[400px]" />
+                        </div>
+                        
+                        <!-- Most Used Languages Card -->
+                        <div class="stats-card bg-accent-start/5 rounded-lg backdrop-blur-sm transform-gpu opacity-0 translate-x-4 transition-all duration-300">
+                            <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=DomBDev&theme=radical&hide_progress=true&hide_border=true&border_radius=2&bg_color=00000000" 
+                                 alt="Most Used Languages" 
+                                 class="w-full max-w-[400px]" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Projects Section -->
+            <section class="mt-16 animate__animated animate__fadeInUp animate__faster animate__delay-1s">
+                <h2 class="text-4xl mb-8 text-accent">Projects</h2>
+                <div class="flex flex-wrap gap-4 mb-8">
+                    <button class="filter-btn active" data-filter="all">All</button>
+                    <button class="filter-btn" data-filter="website">Websites</button>
+                    <button class="filter-btn" data-filter="tools">Tools</button>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 project-list">
+                    <!-- Projects will be dynamically loaded via JavaScript -->
+                </div>
+            </section>
+        </main>
+    </div>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script src="assets/js/config.js"></script>
+    <script src="assets/js/main.js"></script>
 </body>
 </html>
