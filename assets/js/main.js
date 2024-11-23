@@ -92,6 +92,90 @@ document.addEventListener('DOMContentLoaded', () => {
     statsCards.forEach(card => {
         statsObserver.observe(card);
     });
+
+    // Dropdown functionality
+    const projectsDropdown = document.getElementById('projectsDropdown');
+    const dropdownContent = document.getElementById('dropdownContent');
+    const sections = document.querySelectorAll('.section-content');
+    const sectionBtns = document.querySelectorAll('.section-btn');
+
+    projectsDropdown.addEventListener('click', () => {
+        dropdownContent.classList.toggle('hidden');
+        projectsDropdown.querySelector('svg').classList.toggle('rotate-180');
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!projectsDropdown.contains(e.target)) {
+            dropdownContent.classList.add('hidden');
+            projectsDropdown.querySelector('svg').classList.remove('rotate-180');
+        }
+    });
+
+    // Section switching
+    sectionBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const sectionId = btn.dataset.section + 'Section';
+            const sectionTitle = btn.dataset.title;
+            
+            // Update the title
+            document.getElementById('currentSection').textContent = sectionTitle;
+            
+            // Switch sections
+            sections.forEach(section => {
+                section.classList.add('hidden');
+            });
+            document.getElementById(sectionId).classList.remove('hidden');
+            
+            // Close dropdown
+            dropdownContent.classList.add('hidden');
+            projectsDropdown.querySelector('svg').classList.remove('rotate-180');
+            
+            // If switching to contributions section, fetch the data
+            if (btn.dataset.section === 'contributions') {
+                fetchGitHubContributions();
+            }
+        });
+    });
+
+    // GitHub Repos functionality
+    async function fetchGitHubRepos() {
+        try {
+            const response = await fetch('https://api.github.com/users/DomBDev/repos');
+            const repos = await response.json();
+            const repoList = document.querySelector('.repo-list');
+            
+            repos.forEach(repo => {
+                const repoElement = document.createElement('div');
+                repoElement.className = 'bg-accent/5 rounded-lg p-4 hover:bg-accent/10 transition-colors duration-300';
+                repoElement.innerHTML = `
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h3 class="font-mono text-lg text-accent">
+                                <a href="${repo.html_url}" target="_blank" class="hover:underline">${repo.name}</a>
+                            </h3>
+                            <p class="text-sm text-white/70 mt-2">${repo.description || 'No description available'}</p>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <div class="flex items-center gap-1">
+                                <svg class="w-4 h-4 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+                                </svg>
+                                <span class="text-sm text-accent">${repo.stargazers_count}</span>
+                            </div>
+                            <div class="text-xs px-2 py-1 rounded-full bg-accent/10 text-accent">${repo.language || 'N/A'}</div>
+                        </div>
+                    </div>
+                `;
+                repoList.appendChild(repoElement);
+            });
+        } catch (error) {
+            console.error('Error fetching GitHub repos:', error);
+        }
+    }
+
+    // Call fetchGitHubRepos when the page loads
+    fetchGitHubRepos();
 });
 
 const createProjectCard = (project) => {
@@ -248,3 +332,191 @@ const animateProjects = () => {
         }, index * 50);
     });
 };
+
+// Add this new function to fetch and display contributions
+async function fetchGitHubContributions() {
+    try {
+        const username = 'DomBDev';
+        const contributionsContent = document.querySelector('.contributions-content');
+        
+        // First, let's add a loading state
+        contributionsContent.innerHTML = `
+            <div class="flex items-center justify-center py-8">
+                <div class="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-accent"></div>
+            </div>
+        `;
+
+        // Fetch the last year of contributions using the GitHub API
+        const response = await fetch(`https://api.github.com/users/${username}/events/public`);
+        const events = await response.json();
+
+        // Process and group the events
+        const contributionData = processGitHubEvents(events);
+        
+        // Create the contributions display
+        contributionsContent.innerHTML = `
+            <div class="grid gap-6">
+                <!-- Summary Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="bg-accent/5 rounded-lg p-4 border border-accent/10">
+                        <h3 class="text-accent font-mono text-sm mb-2">Total Contributions</h3>
+                        <p class="text-2xl font-bold">${contributionData.totalContributions}</p>
+                    </div>
+                    <div class="bg-accent/5 rounded-lg p-4 border border-accent/10">
+                        <h3 class="text-accent font-mono text-sm mb-2">Active Repositories</h3>
+                        <p class="text-2xl font-bold">${contributionData.activeRepos.size}</p>
+                    </div>
+                    <div class="bg-accent/5 rounded-lg p-4 border border-accent/10">
+                        <h3 class="text-accent font-mono text-sm mb-2">Contribution Streak</h3>
+                        <p class="text-2xl font-bold">${contributionData.currentStreak} days</p>
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="bg-accent/5 rounded-lg p-6 border border-accent/10">
+                    <h3 class="text-accent font-mono text-lg mb-4">Recent Activity</h3>
+                    <div class="space-y-4">
+                        ${generateRecentActivityHTML(contributionData.recentActivity)}
+                    </div>
+                </div>
+
+                <!-- Active Repositories -->
+                <div class="bg-accent/5 rounded-lg p-6 border border-accent/10">
+                    <h3 class="text-accent font-mono text-lg mb-4">Active Repositories</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        ${generateActiveReposHTML(contributionData.activeRepos)}
+                    </div>
+                </div>
+            </div>
+        `;
+
+    } catch (error) {
+        console.error('Error fetching GitHub contributions:', error);
+        contributionsContent.innerHTML = `
+            <div class="text-center py-8 text-accent/60">
+                Unable to load contribution data at this time. Please try again later.
+            </div>
+        `;
+    }
+}
+
+function processGitHubEvents(events) {
+    const data = {
+        totalContributions: 0,
+        activeRepos: new Set(),
+        currentStreak: 0,
+        recentActivity: [],
+    };
+
+    const today = new Date();
+    let lastContributionDate = null;
+
+    events.forEach(event => {
+        // Count total contributions
+        data.totalContributions++;
+
+        // Track active repositories
+        if (event.repo) {
+            data.activeRepos.add(event.repo.name);
+        }
+
+        // Calculate streak
+        const eventDate = new Date(event.created_at);
+        if (!lastContributionDate) {
+            lastContributionDate = eventDate;
+            data.currentStreak = 1;
+        } else {
+            const dayDiff = Math.floor((lastContributionDate - eventDate) / (1000 * 60 * 60 * 24));
+            if (dayDiff <= 1) {
+                data.currentStreak++;
+            }
+            lastContributionDate = eventDate;
+        }
+
+        // Track recent activity (last 10 events)
+        if (data.recentActivity.length < 10) {
+            data.recentActivity.push(event);
+        }
+    });
+
+    return data;
+}
+
+function generateRecentActivityHTML(activities) {
+    return activities.map(activity => {
+        const date = new Date(activity.created_at);
+        const timeAgo = getTimeAgo(date);
+        
+        return `
+            <div class="flex items-start gap-4 p-3 rounded-lg hover:bg-accent/10 transition-colors">
+                ${getActivityIcon(activity.type)}
+                <div class="flex-grow">
+                    <p class="text-sm">
+                        <span class="text-accent">${formatActivityText(activity)}</span>
+                    </p>
+                    <p class="text-xs text-accent/60 mt-1">${timeAgo}</p>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+function generateActiveReposHTML(repos) {
+    return Array.from(repos).map(repo => `
+        <div class="p-3 rounded-lg hover:bg-accent/10 transition-colors">
+            <a href="https://github.com/${repo}" target="_blank" class="text-sm text-accent hover:underline">
+                ${repo.split('/')[1]}
+            </a>
+        </div>
+    `).join('');
+}
+
+function getActivityIcon(type) {
+    const iconClass = "w-5 h-5 text-accent";
+    const icons = {
+        PushEvent: `<svg class="${iconClass}" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.53-11.54a.75.75 0 0 0-1.06 0l-2 2a.75.75 0 1 0 1.06 1.06L8 6.06l1.47 1.47a.75.75 0 0 0 1.06-1.06l-2-2z"/>
+        </svg>`,
+        CreateEvent: `<svg class="${iconClass}" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.5-7.5v-3a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z"/>
+        </svg>`,
+        // Add more icons for different event types as needed
+    };
+    
+    return icons[type] || icons.PushEvent;
+}
+
+function formatActivityText(activity) {
+    switch (activity.type) {
+        case 'PushEvent':
+            return `Pushed to ${activity.repo.name}`;
+        case 'CreateEvent':
+            return `Created ${activity.payload.ref_type} in ${activity.repo.name}`;
+        case 'IssuesEvent':
+            return `${activity.payload.action} issue in ${activity.repo.name}`;
+        default:
+            return `Activity in ${activity.repo.name}`;
+    }
+}
+
+function getTimeAgo(date) {
+    const seconds = Math.floor((new Date() - date) / 1000);
+    
+    const intervals = {
+        year: 31536000,
+        month: 2592000,
+        week: 604800,
+        day: 86400,
+        hour: 3600,
+        minute: 60
+    };
+    
+    for (const [unit, secondsInUnit] of Object.entries(intervals)) {
+        const interval = Math.floor(seconds / secondsInUnit);
+        if (interval >= 1) {
+            return `${interval} ${unit}${interval === 1 ? '' : 's'} ago`;
+        }
+    }
+    
+    return 'just now';
+}

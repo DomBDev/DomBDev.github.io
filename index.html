@@ -79,6 +79,18 @@
             width: 100%;
             background-color: white;
         }
+
+        .section-content {
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        .section-content.hidden {
+            display: none;
+        }
+
+        #projectsDropdown svg {
+            transition: transform 0.3s ease-in-out;
+        }
     </style>
 </head>
 <body class="bg-background text-white font-body overflow-x-hidden">
@@ -119,10 +131,17 @@
                 <!-- Welcome Section -->
                 <div class="lg:w-1/2">
                     <h1 class="font-display text-7xl font-bold mb-8 animate__animated animate__fadeInUp animate__faster">Welcome.</h1>
-                    <div class="max-w-2xl mb-16">
+                    <div class="max-w-2xl mb-8">
                         <p class="mb-4 animate__animated animate__fadeInUp animate__faster animate__delay-1s">I'm Dominic Bonanni, a full-stack developer based in New York. I specialize in building modern web applications using the MERN stack, Flask, and .NET, with a focus on creating seamless user experiences.</p>
                         <p class="animate__animated animate__fadeInUp animate__faster animate__delay-1s">From e-commerce solutions to interactive learning platforms, I'm passionate about crafting clean, scalable code and delivering pixel-perfect interfaces. My expertise spans across React, Node.js, TailwindCSS, and various modern web technologies.</p>
                     </div>
+                    <a href="https://bonannidominic.me" target="_blank" class="group inline-flex items-center gap-2 px-6 py-3 bg-accent/10 hover:bg-accent/20 rounded-lg transition-all duration-300 animate__animated animate__fadeInUp animate__faster animate__delay-2s">
+                        <span class="font-mono text-accent group-hover:text-white transition-colors duration-300">Visit Portfolio</span>
+                        <svg class="w-5 h-5 text-accent group-hover:text-white transition-all duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                        </svg>
+                        <div class="absolute inset-0 border border-accent/20 rounded-lg transition-all duration-300 group-hover:border-accent/40"></div>
+                    </a>
                 </div>
 
                 <!-- GitHub Stats Section -->
@@ -158,20 +177,50 @@
 
             <!-- Projects Section -->
             <section class="mt-16 animate__animated animate__fadeInUp animate__faster animate__delay-1s">
-                <h2 class="text-4xl mb-8 text-accent">Projects</h2>
-                <div class="flex flex-wrap gap-4 mb-8">
-                    <button class="filter-btn active" data-filter="all">All</button>
-                    <button class="filter-btn" data-filter="website">Websites</button>
-                    <button class="filter-btn" data-filter="tools">Tools</button>
+                <div class="relative inline-block z-20 mb-6">
+                    <button id="projectsDropdown" class="text-4xl mb-2 text-accent flex items-center gap-2">
+                        <span id="currentSection">Projects</span>
+                        <svg class="w-6 h-6 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </button>
+                    <div id="dropdownContent" class="absolute left-0 w-48 rounded-md shadow-lg bg-background border border-accent/20 hidden">
+                        <div class="py-1">
+                            <button class="section-btn block px-4 py-2 text-sm text-accent hover:bg-accent/10 w-full text-left" data-section="projects" data-title="Projects">Projects</button>
+                            <button class="section-btn block px-4 py-2 text-sm text-accent hover:bg-accent/10 w-full text-left" data-section="repos" data-title="Repositories">Repositories</button>
+                            <button class="section-btn block px-4 py-2 text-sm text-accent hover:bg-accent/10 w-full text-left" data-section="contributions" data-title="Contributions">Contributions</button>
+                        </div>
+                    </div>
                 </div>
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 project-list">
-                    <!-- Projects will be dynamically loaded via JavaScript -->
+
+                <!-- Projects Section -->
+                <div id="projectsSection" class="section-content">
+                    <div class="flex flex-wrap gap-4 mb-8">
+                        <button class="filter-btn active" data-filter="all">All</button>
+                        <button class="filter-btn" data-filter="website">Websites</button>
+                        <button class="filter-btn" data-filter="tools">Tools</button>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 project-list">
+                        <!-- Projects will be dynamically loaded via JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Repos Section -->
+                <div id="reposSection" class="section-content hidden">
+                    <div class="grid gap-4 repo-list">
+                        <!-- Repositories will be dynamically loaded via JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Contributions Section -->
+                <div id="contributionsSection" class="section-content hidden">
+                    <div class="contributions-content">
+                        <!-- Contributions will be dynamically loaded via JavaScript -->
+                    </div>
                 </div>
             </section>
         </main>
     </div>
-    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
-    <script src="assets/js/config.js"></script>
     <script src="assets/js/main.js"></script>
 </body>
 </html>
