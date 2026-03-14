@@ -362,6 +362,34 @@
         position: relative;
         width: calc(100% - 2 * var(--spacing-md));
         height: auto;
+        padding: var(--spacing-lg) var(--spacing-md);
+        padding-bottom: var(--spacing-sm);
+    }
+    
+    .profile-image {
+        margin-bottom: var(--spacing-sm);
+    }
+    
+    .profile-title {
+        margin-bottom: var(--spacing-sm);
+    }
+    
+    .contact-info {
+        margin-bottom: var(--spacing-sm);
+    }
+    
+    .sidebar-bottom {
+        padding-top: var(--spacing-md);
+        padding-bottom: var(--spacing-sm);
+    }
+    
+    .resume-button {
+        margin-top: var(--spacing-sm);
+    }
+    
+    .sidebar-footer {
+        margin-top: var(--spacing-sm);
+        padding-top: var(--spacing-sm);
     }
 }
 

@@ -5,16 +5,23 @@ document.addEventListener('DOMContentLoaded', () => {
     let tabAccessOrder = JSON.parse(localStorage.getItem('tabAccessOrder')) || [];
     
     const updateTabZIndex = () => {
-        tabButtons.forEach((button, index) => {
-            const tabName = button.getAttribute('data-tab');
-            const orderIndex = tabAccessOrder.indexOf(tabName);
-            
-            if (orderIndex !== -1) {
-                button.style.zIndex = 4 + orderIndex;
-            } else {
-                button.style.zIndex = index;
-            }
-        });
+        const isMobile = window.matchMedia('(max-width: 480px)').matches;
+        
+        if (isMobile) {
+            tabButtons.forEach((button, index) => {
+                button.style.zIndex = index < 2 ? index : 10 + index;
+            });
+        } else {
+            tabButtons.forEach((button, index) => {
+                const tabName = button.getAttribute('data-tab');
+                const orderIndex = tabAccessOrder.indexOf(tabName);
+                if (orderIndex !== -1) {
+                    button.style.zIndex = 4 + orderIndex;
+                } else {
+                    button.style.zIndex = index;
+                }
+            });
+        }
     };
     
     const switchTab = (tabName) => {
@@ -60,6 +67,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     
     updateTabZIndex();
+    
+    window.matchMedia('(max-width: 480px)').addEventListener('change', updateTabZIndex);
     
     const savedTab = localStorage.getItem('activeTab');
     if (savedTab) {

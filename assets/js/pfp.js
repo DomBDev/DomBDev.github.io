@@ -205,18 +205,79 @@ function animate() {
 }
 
 canvas.addEventListener('mousemove', function(e) {
-    const rect = canvas.getBoundingClientRect();
-    
-    const scaleX = canvas.width / rect.width;
-    const scaleY = canvas.height / rect.height;
-    
-    explosion.x = (e.clientX - rect.left) * scaleX;
-    explosion.y = (e.clientY - rect.top) * scaleY;
-    explosion.active = true;
+    setExplosionFromPoint(e.clientX, e.clientY);
 });
 
 canvas.addEventListener('mouseleave', function() {
     explosion.active = false;
+});
+
+function setExplosionFromPoint(clientX, clientY) {
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+    explosion.x = (clientX - rect.left) * scaleX;
+    explosion.y = (clientY - rect.top) * scaleY;
+    explosion.active = true;
+}
+
+function isPointInCircle(clientX, clientY) {
+    const el = canvas.parentElement || canvas;
+    const rect = el.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+    const radius = Math.min(rect.width, rect.height) / 2;
+    const dist = Math.sqrt((clientX - cx) ** 2 + (clientY - cy) ** 2);
+    return dist <= radius;
+}
+
+let touchIdOnCanvas = null;
+
+canvas.addEventListener('touchstart', function(e) {
+    if (e.touches.length > 0) {
+        const touch = e.touches[0];
+        if (isPointInCircle(touch.clientX, touch.clientY)) {
+            touchIdOnCanvas = touch.identifier;
+            setExplosionFromPoint(touch.clientX, touch.clientY);
+            e.preventDefault();
+        }
+    }
+}, { passive: false });
+
+canvas.addEventListener('touchmove', function(e) {
+    if (touchIdOnCanvas !== null) {
+        for (let i = 0; i < e.touches.length; i++) {
+            if (e.touches[i].identifier === touchIdOnCanvas) {
+                setExplosionFromPoint(e.touches[i].clientX, e.touches[i].clientY);
+                e.preventDefault();
+                break;
+            }
+        }
+    }
+}, { passive: false });
+
+canvas.addEventListener('touchend', function(e) {
+    if (e.changedTouches) {
+        for (let i = 0; i < e.changedTouches.length; i++) {
+            if (e.changedTouches[i].identifier === touchIdOnCanvas) {
+                touchIdOnCanvas = null;
+                explosion.active = false;
+                break;
+            }
+        }
+    }
+});
+
+canvas.addEventListener('touchcancel', function(e) {
+    if (e.changedTouches) {
+        for (let i = 0; i < e.changedTouches.length; i++) {
+            if (e.changedTouches[i].identifier === touchIdOnCanvas) {
+                touchIdOnCanvas = null;
+                explosion.active = false;
+                break;
+            }
+        }
+    }
 });
 
 const profileImage = document.querySelector('.profile-image');
