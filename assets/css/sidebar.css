@@ -1,4 +1,3 @@
-/* Sidebar Styles */
 .sidebar {
     width: var(--sidebar-width);
     background-color: var(--bg-secondary);
@@ -17,6 +16,7 @@
         6px -4px 12px -6px rgba(0,0,0,0.8),
         -6px -4px 12px -6px rgba(0,0,0,0.8),
         0 -8px 16px -8px rgba(0,0,0,0.8),
+        0 6px 16px -4px rgba(0,0,0,0.8),
         inset 0 1px 0 rgba(232, 227, 220, 0.1)
 }
 
@@ -289,28 +289,28 @@
 
 .social-links {
     display: flex;
-    gap: var(--spacing-sm);
+    gap: 12px;
     justify-content: center;
 }
 
 .social-link {
-    width: 36px;
-    height: 36px;
-    border-radius: var(--radius-full);
-    background-color: var(--overlay-light);
+    width: 50px;
+    height: 50px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--accent-primary);
+    background: transparent;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--text-muted);
+    color: var(--accent-primary);
     transition: all var(--transition-fast);
     text-decoration: none;
     cursor: pointer;
 }
 
 .social-link:hover {
-    background-color: var(--accent-primary);
-    color: var(--bg-primary);
-    transform: translateY(-1px);
+    border-color: rgba(166, 135, 107, 0.5);
+    background: rgba(166, 135, 107, 0.06);
 }
 
 .resume-button {
@@ -326,14 +326,15 @@
     font-weight: 600;
     transition: all var(--transition-fast);
     justify-content: center;
-    margin-top: var(--spacing-md);
+    margin-top: 10px;
+    width: 100%;
+    border: 1px solid rgba(166, 135, 107, 0.25);
 }
 
 .resume-button:hover {
-    background-color: rgba(122, 158, 126, 0.65);
-    color: rgba(255, 255, 255, 0.8);
+    background-color: var(--accent-secondary);
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(122, 158, 126, 0.3);
+    box-shadow: 0 4px 12px rgba(166, 135, 107, 0.25);
 }
 
 .resume-icon {
@@ -350,7 +351,6 @@
     border-top: 1px solid var(--overlay-light);
 }
 
-/* Sidebar Responsive */
 @media (max-width: 1024px) {
     .sidebar {
         width: var(--sidebar-width-tablet);
