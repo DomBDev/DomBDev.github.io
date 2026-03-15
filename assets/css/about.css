@@ -1,4 +1,3 @@
-/* About Section Styles */
 #about .about-subtitle {
     color: var(--text-subtle);
     margin-bottom: var(--spacing-md);
@@ -18,6 +17,26 @@
         gap: var(--spacing-lg);
         align-items: start;
     }
+
+    .about-intro-column {
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-sm);
+    }
+
+    .about-intro-column .about-subtitle {
+        margin-top: 0;
+        margin-bottom: 0;
+    }
+
+    .current-focus-panel {
+        margin-top: 0;
+        align-self: center;
+    }
+}
+
+.about-intro-column .about-subtitle {
+    margin-top: 4px;
 }
 
 .intro-block {
@@ -32,7 +51,6 @@
 
 .current-focus-panel {
     padding: 12px 18px;
-    margin-top: 8px;
     background: linear-gradient(135deg, rgba(166, 135, 107, 0.08) 0%, var(--overlay-subtle) 100%);
     border: 1px solid rgba(166, 135, 107, 0.2);
     border-left: 3px solid var(--accent-primary);
@@ -345,10 +363,10 @@
         flex-direction: column;
     }
     
-    #about .intro-block { order: 1; }
+    #about .about-intro-column { order: 1; }
     #about .intro-block p.intro-text:nth-of-type(2) { display: none; }
     #about .current-focus-panel { order: 6; }
-    #about .about-subtitle {margin-bottom: 4px;}
+    #about .about-intro-column .about-subtitle { margin-bottom: 4px; }
     
     #about .section-content > .divider:nth-of-type(1) { order: 2; }
     #about .subsection-title-featured { order: 3; }
