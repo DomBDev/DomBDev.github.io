@@ -12,3 +12,5 @@ Allow: /
 
 User-agent: *
 Disallow: /
+
+Sitemap: https://domb.dev/sitemap.xml
