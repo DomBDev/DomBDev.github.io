@@ -1,16 +1,2 @@
-User-agent: Googlebot
-Allow: /
-
-User-agent: GPTBot
-Allow: /
-
-User-agent: ClaudeBot
-Allow: /
-
-User-agent: PerplexityBot
-Allow: /
-
 User-agent: *
-Disallow: /
-
-Sitemap: https://domb.dev/sitemap.xml
+Allow: /
